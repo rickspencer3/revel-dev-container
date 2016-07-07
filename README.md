@@ -1,5 +1,5 @@
 # Introduction
-A development container is just what it sounds like, a container designed to facilitate make it easy for developers to write code with a specific framework. A well designed development container will remove any concern about installing the framework and tools, managing associated infrastructure such as databases, or pretty much anything that will distract the developer from actually writing code.
+A development container is just what it sounds like, a container designed to facilitate make it easy for developers to write code with a specific framework. A well designed development container will remove any concern about installing the framework and tools, managing associated infrastructure such as databases, or pretty much anything that will distract the developer from actually writing code. Additionally, it will assume that the developer is creating micro-services and immutable infrastucture.
 
 # Create a Repository
 We are going to use Stacksmith to generate the base Dockerfile that we will use. This is important because Bitnami actively maintains their base images. If we use Stacksmith to generate the Dockerfile, Bitnami will automatically send us a pull request if their base image gets updated for any reason. In this way we stay up to date, and even automate it.
@@ -51,11 +51,48 @@ The important line is this:
 If we do all of our work in the container below that line, then Stacksmith can make a pull request by changing only what is above that line. This will allow me to automate testing and other cool things when Stacksmith has an update.
 
 # Build the Container
+Let's start out by building the container from the Dockerfile just to make sure it all works well. I like to tag the images when I build them to make them easier to run, so:
 
-# Create the docker-compose.yml file
+```
+$ docker build -t revel .
+```
+Of course since it is unmodified, it builds perfectly fine. Let's take a look inside, though. Note that I am mounting a local directory called "app". The reason for this will be clear later. The fact that the container will be used in development of immutable infrastructure should be an early clue, though.
+
+```
+$ docker run -it -v /Users/rick/revel-dev-container/app:/app revel /bin/bash
+
+        _____
+ ______/_____\_______
+/                    \
+!    Bitnami         !
+!      Stacksmith    !
+\____________________/
+         {\ }
+         { \}
+         L_ }
+        / _)}
+       / /__L
+ _____/ (____)  Welcome to your rickspencer3/revel-dev-container container!
+        (____)  Go to https://stacksmith.bitnami.com/dashboard/stacks/l51eq4k
+ _____  (____)  to manage your stack.
+      \_(____)  
+         {\ }
+         { \}
+         \__/
+
+root@65d461fd2182:/app#
+```
+I know the container will need use git to install revel, so let's make sure that git is installed.
+
+```
+root@2e980047b8de:/app# git --version
+git version 1.7.10.4
+```
 
 # Add content to the container
 
 # Override the Entry Point
 
-#
+# Create the docker-compose.yml file
+
+# 
