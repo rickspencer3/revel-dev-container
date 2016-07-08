@@ -20,7 +20,7 @@ ENV PATH=$GOPATH/bin:/opt/bitnami/go/bin:$PATH
 
 ## STACKSMITH-END: Modifications below this line will be unchanged when regenerating
 
+RUN go get github.com/revel/cmd/revel
+ENV GOPATH=$GOPATH:/app
 
-# Go base template
-COPY . /app
 WORKDIR /app

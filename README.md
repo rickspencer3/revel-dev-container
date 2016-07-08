@@ -95,10 +95,45 @@ git version 1.7.10.4
 ## Add Revel to the container
 This container will extend the default Go container by installing Revel. Instructions for installing Revel are available at the [Revel Github Page](https://revel.github.io/).
 
-We do this using go get. Simply add this command to Dockerfile directly after the "STACKSMITH-END" part.
+We do this using go get. Simply add this command to Dockerfile directly after the "STACKSMITH-END" part. Revel needs to build inside $GOPATH. Because we want the code to always be mounted externally (remember, the container is immutable) we can add the app directory to GOPATH in the container as well.
 
 ```
 RUN go get github.com/revel/cmd/revel
+ENV GOPATH=$GOPATH:/app
+```
+
+Now we can build and run the container again, and ensure that the revel commands work.
+
+```
+$ docker build -t revel .
+$ docker run -it -v /Users/rick/revel-dev-container/app:/app revel /bin/bash
+# revel new github.com/rickspencer3/bitnami-app
+~
+~ revel! http://revel.github.io
+~
+Your application is ready:
+   /app/src/github.com/rickspencer3/bitnami-app
+
+You can run it with:
+   revel run github.com/rickspencer3/bitnami-app
+   root@30e411634363:/app# revel run github.com/rickspencer3/bitnami-app
+   ~
+   ~ revel! http://revel.github.io
+   ~
+   INFO  2016/07/08 09:44:36 revel.go:365: Loaded module static
+   INFO  2016/07/08 09:44:36 revel.go:365: Loaded module testrunner
+   INFO  2016/07/08 09:44:36 revel.go:230: Initialized Revel v0.13.1 (2016-06-06) for >= go1.4
+   INFO  2016/07/08 09:44:36 run.go:57: Running bitnami-app (github.com/rickspencer3/bitnami-app) in dev mode
+   INFO  2016/07/08 09:44:36 harness.go:170: Listening on :9000
+
+```
+Since the container is immutable and I mounted the app directory from a local volume, we can see that the generated code was saved locally if I exit the container and look on my local directory.
+
+```
+# exit
+exit
+$ ls app/
+src
 ```
 
 # Override the Entry Point
