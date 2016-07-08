@@ -102,6 +102,7 @@ RUN go get github.com/revel/cmd/revel
 ENV GOPATH=$GOPATH:/app
 ```
 
+##Manually test Revel
 Now we can build and run the container again, and ensure that the revel commands work.
 
 ```
@@ -137,6 +138,102 @@ src
 ```
 
 # Override the Entry Point
+Now that we have an image that installs Revel and sets up GOPATH properly, we can go ahead and add a little logic to the image. We want the image to behave differently depedning on:
+
+1. Is there already source code in the /app directory? If not, then generate the code.
+2. Let the developer pass in their github user name and a name for the application to create and/or run that application. This is done via environment variables.
+
+##Create and override the entrypoint.sh file
+I am going to start by looking at an [existing entrypoint.sh file](https://github.com/bitnami/bitnami-docker-laravel/blob/master/rootfs/app-entrypoint.sh).
+
+That is much more complete that we need, but there are some useful bits for me to copy out of there. First, I will go ahead and call 2 of the embedded entrypoint.sh functions that come with the base container. Then, I will execute the command to create the app, and finally I will tell tiny to run the app. I will start with place holder names.
+
+```
+#!/bin/bash
+
+#call useful embedded functions
+source /opt/bitnami/stacksmith-utils.sh
+print_welcome_page
+check_for_updates &
+
+#create the app
+revel new github.com/githubuser/myapp
+
+#run the app
+revel run github.com/githubuser/myapp
+```
+
+revel-entrypoint.sh is a logical name for this. We need to add it to our docker file and override the existing entrypoint.
+
+```
+COPY ./revel-entrypoint.sh /
+ENTRYPOINT ["/revel-entrypoint.sh"]
+```
+
+##Test the New Entry Point
+After I build the image again, I will run it, but I will use a slightly different command to run it non-interactively.
+
+```
+docker run -d -v /Users/rick/revel-dev-container/app:/app revel
+```
+
+After running it this way, I can look at the logs to see what the container is doing:
+
+```
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+e9dedbd420b1        revel               "/revel-entrypoint.sh"   5 seconds ago       Up 4 seconds                            determined_shannon
+Ricks-MacBook-Pro:revel-dev-container rick$ docker logs e9dedbd420b1
+
+        _____
+ ______/_____\_______
+/                    \
+!    Bitnami         !
+!      Stacksmith    !
+\____________________/
+         {\ }
+         { \}
+         L_ }
+        / _)}
+       / /__L
+ _____/ (____)  Welcome to your rickspencer3/revel-dev-container container!
+        (____)  Go to https://stacksmith.bitnami.com/dashboard/stacks/n7dnqby
+ _____  (____)  to manage your stack.
+      \_(____)  
+         {\ }
+         { \}
+         \__/
+
+~
+~ revel! http://revel.github.io
+~
+Abort: Import path github.com/githubuser/myapp already exists.
+~
+~ revel! http://revel.github.io
+~
+INFO  2016/07/08 10:32:22 revel.go:365: Loaded module static
+INFO  2016/07/08 10:32:22 revel.go:365: Loaded module testrunner
+INFO  2016/07/08 10:32:22 revel.go:230: Initialized Revel v0.13.1 (2016-06-06) for >= go1.4
+INFO  2016/07/08 10:32:22 run.go:57: Running myapp (github.com/githubuser/myapp) in dev mode
+INFO  2016/07/08 10:32:22 harness.go:170: Listening on :9000
+Ricks-MacBook-Pro:revel-dev-container rick$
+```
+
+##Expose the Port
+Clearly the app is running. However, I won't be able ot look at it because I didn't open any ports in Dockerfile, so I will add that to the docker file:
+
+```
+EXPOSE 9000
+```
+
+Then I can map that port when I run the container:
+
+```
+$ docker run -d -p 9000:9000 -v /Users/rick/revel-dev-container/app:/app revel
+```
+
+Now I can look at it in the browser:
+![A web browser showing the "It works" message from Revel](./b1.png)
 
 # Create the docker-compose.yml file
 

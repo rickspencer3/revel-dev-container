@@ -23,4 +23,9 @@ ENV PATH=$GOPATH/bin:/opt/bitnami/go/bin:$PATH
 RUN go get github.com/revel/cmd/revel
 ENV GOPATH=$GOPATH:/app
 
+COPY ./revel-entrypoint.sh /
+ENTRYPOINT ["/revel-entrypoint.sh"]
+
+EXPOSE 9000
+
 WORKDIR /app
