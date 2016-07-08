@@ -235,6 +235,107 @@ $ docker run -d -p 9000:9000 -v /Users/rick/revel-dev-container/app:/app revel
 Now I can look at it in the browser:
 ![A web browser showing the "It works" message from Revel](./b1.png)
 
+##Skip Generating the App if it is Already there
+By adding some simple bash logic, we can generate the app code only if it already exists:
+
+```
+if [ ! -d "/app/src/" ]; then
+  echo -e  "Creating Revel App"
+  revel new github.com/githubuser/myapp
+else
+  echo -e "App found, reusing"
+fi
+```
+
+##Parameterize the App Creation and Use
+Lastly, we can setup the entry point to use environment variables to allow the developer to specify their github username and the name for their app. If the developer does not pass in a github user id, we will simply create the app.
+
+The whole revel-entrypoint.sh file looks like this:
+
+```
+#!/bin/bash
+
+#call useful embedded functions
+source /opt/bitnami/stacksmith-utils.sh
+print_welcome_page
+check_for_updates &
+
+#set app name to ENV or default
+AP="my-app"
+
+if [ "$APP_NAME" != "" ]; then
+    AP=$APP_NAME
+fi
+
+#set path to github user or default
+P=""
+if [ "$GITHUB_USER" != "" ]; then
+  P="github.com/$GITHUB_USER/$AP"
+else
+  P="$AP"
+fi
+
+echo "Using $P for application path"
+
+#create the app if necessary
+if [ ! -d "/app/$P/src/" ]; then
+  echo -e  "Creating Revel App"
+  revel new $P
+else
+  echo -e "App found, reusing"
+fi
+
+#run the app
+revel run $P
+```
+
+And if we use the environment variables, we can control how the app is created:
+
+```
+docker run --name revel -d -p 9000:9000 -v /Users/rick/revel-dev-container/app:/app -e GITHUB_USER='rickspencer3' -e APP_NAME='ricksapp' revel
+ddc56599dc36d019fa9e7453cdc8ee7157175b658f10c8295b5dc0a16776293f
+Ricks-MacBook-Pro:revel-dev-container rick$ docker logs revel
+
+        _____
+ ______/_____\_______
+/                    \
+!    Bitnami         !
+!      Stacksmith    !
+\____________________/
+         {\ }
+         { \}
+         L_ }
+        / _)}
+       / /__L
+ _____/ (____)  Welcome to your rickspencer3/revel-dev-container container!
+        (____)  Go to https://stacksmith.bitnami.com/dashboard/stacks/n7dnqby
+ _____  (____)  to manage your stack.
+      \_(____)  
+         {\ }
+         { \}
+         \__/
+
+github.com/rickspencer3/ricksapp
+Creating Revel App
+~
+~ revel! http://revel.github.io
+~
+Your application is ready:
+   /app/src/github.com/rickspencer3/ricksapp
+
+You can run it with:
+   revel run github.com/rickspencer3/ricksapp
+~
+~ revel! http://revel.github.io
+~
+INFO  2016/07/08 13:33:16 revel.go:365: Loaded module testrunner
+INFO  2016/07/08 13:33:16 revel.go:365: Loaded module static
+INFO  2016/07/08 13:33:16 revel.go:230: Initialized Revel v0.13.1 (2016-06-06) for >= go1.4
+INFO  2016/07/08 13:33:16 run.go:57: Running ricksapp (github.com/rickspencer3/ricksapp) in dev mode
+INFO  2016/07/08 13:33:16 harness.go:170: Listening on :9000
+```
+
+
 # Create the docker-compose.yml file
 
 #
