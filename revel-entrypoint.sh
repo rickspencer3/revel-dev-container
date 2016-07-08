@@ -23,7 +23,7 @@ fi
 echo "Using $P for application path"
 
 #create the app if necessary
-if [ ! -d "/app/$P/src/" ]; then
+if [ ! -d "/app/src/" ]; then
   echo -e  "Creating Revel App"
   revel new $P
 else
