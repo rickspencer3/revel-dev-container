@@ -337,5 +337,50 @@ INFO  2016/07/08 13:33:16 harness.go:170: Listening on :9000
 
 
 # Create the docker-compose.yml file
+The purpose of the docker-compose file is twofold:
+1. It simplifies things for the developer, as it provides an easy place for them to edit and persist settings, which can then be invoked with a single command.
+2. It makes it easy to provide the developer with related infrascruture components, such as a database.
 
-#
+Looking at [another Bitnami project](https://github.com/bitnami/bitnami-docker-laravel/blob/master/docker-compose.yml) it was easy to find a docker-compose.yml file that only needed three small tweaks:
+1. Adjust the default port to 9000.
+2. Edit it to use the Revel container as well. Because I was using the --name switch when I was running the image, I can refer to it that way until I have the image posted.
+3. Optionally, tell it use the local app/ subdirectory.
+
+```
+version: '2'
+
+services:
+  mariadb:
+    image: bitnami/mariadb:10.1.14-r0
+    environment:
+      - MARIADB_USER=my_user
+      - MARIADB_DATABASE=my_database
+      - MARIADB_PASSWORD=my_password
+
+  myapp:
+    image: revel
+    environment:
+      - DB_HOST=mariadb
+      - DB_USERNAME=my_user
+      - DB_DATABASE=my_database
+      - DB_PASSWORD=my_password
+    depends_on:
+      - mariadb
+    ports:
+      - 9000:9000
+    volumes:
+      - ./app:/app
+```
+With this file, it is a very simple matter for the developer to start the project.
+
+```
+$ docker-compose up
+reveldevcontainer_mariadb_1 is up-to-date
+Starting reveldevcontainer_myapp_1
+Attaching to reveldevcontainer_mariadb_1, reveldevcontainer_myapp_1
+...
+myapp_1    | INFO  2016/07/08 14:05:14 revel.go:365: Loaded module static
+myapp_1    | INFO  2016/07/08 14:05:14 revel.go:230: Initialized Revel v0.13.1 (2016-06-06) for >= go1.4
+myapp_1    | INFO  2016/07/08 14:05:14 main.go:30: Running revel server
+
+```
