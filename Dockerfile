@@ -21,6 +21,7 @@ ENV PATH=$GOPATH/bin:/opt/bitnami/go/bin:$PATH
 ## STACKSMITH-END: Modifications below this line will be unchanged when regenerating
 
 RUN go get github.com/revel/cmd/revel
+RUN go get github.com/go-sql-driver/mysql
 ENV GOPATH=$GOPATH:/app
 
 COPY ./revel-entrypoint.sh /
