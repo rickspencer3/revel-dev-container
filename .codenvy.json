@@ -20,7 +20,21 @@
             "type": "docker",
             "dev": true
           }
-        ]
+        ],
+        "projects": [
+  {
+    "name": "revel",
+    "type": "go",
+    "path": "/revel",
+    
+    },
+    "mixins": [
+      "git"
+    ],
+    "modules": [],
+    "problems": []
+  }
+]
       }
     ]
 }
