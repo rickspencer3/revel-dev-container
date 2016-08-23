@@ -1,21 +1,21 @@
 {
   "v": "4.0",
   "workspace": {
-    "name": "express",
-    "defaultEnv": "express",
+    "name": "swift",
+    "defaultEnv": "swift",
     "environments": [
       {
-        "name": "express",
+        "name": "swift",
         "recipe": null,
         "machineConfigs": [
           {
             "name": "ws-machine",
             "limits": {
-              "ram": 1000
+              "ram": 1024
             },
             "source": {
-              "type": "dockerfile",
-              "location": "https://raw.githubusercontent.com/amrecio/bitnami-docker-express/master/.codenvy.dockerfile"
+              "type": "image",
+              "location": "juanariza131/che-swift"
             },
             "type": "docker",
             "dev": true
@@ -25,37 +25,41 @@
     ],
     "projects": [
       {
-        "name": "express-sample",
-        "type": "node-js",
-        "path": "/express-sample",
+        "name": "swift-sample",
+        "type": "blank",
+        "path": "/swift-sample",
         "source": {
           "type": "git",
-          "location": "https://github.com/amrecio/bitnami-docker-express",
+          "location": "https://github.com/juan131/bitnami-docker-swift.git",
           "parameters": {
-            "keepVcs": "false"
+            "branch": "che",
+            "keepVcs": "true"
           }
         },
         "mixins": [
-          "git"
+          "git",
+          "pullrequest"
         ],
+        "attributes": {
+          "local_branch": [ "contrib" ],
+          "contribute_to_branch" : [ "master" ]
+        },
         "modules": [],
         "problems": []
       }
     ],
     "commands": [
       {
-        "name": "create sample project",
+        "name": "build and start",
         "type": "custom",
-        "commandLine": "cd ${current.project.path} && npm install express@4.13.4 && express -f . && npm install",
+        "commandLine": "cd ${current.project.path}/app_template && swift build && ./.build/debug/app_template",
         "attributes": {}
       },
       {
-        "name": "start",
+        "name": "build sample project",
         "type": "custom",
-        "commandLine": "cd ${current.project.path} && npm start",
-        "attributes": {
-          "previewUrl": "http://${server.port.3000}/"
-        }
+        "commandLine": "mkdir ${current.project.path}/app_template && cd ${current.project.path}/app_template &&  swift-package init --type executable && swift build",
+        "attributes": {}
       }
     ]
   },
@@ -64,7 +68,7 @@
       "actions": [
         {
           "properties": {
-            "name": "create sample project"
+            "name": "build sample project"
           },
           "id": "runCommand"
         }
