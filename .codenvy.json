@@ -1,11 +1,11 @@
 {
   "v": "4.0",
   "workspace": {
-    "name": "swift",
-    "defaultEnv": "swift",
+    "name": "revel",
+    "defaultEnv": "revel",
     "environments": [
       {
-        "name": "swift",
+        "name": "revel",
         "recipe": null,
         "machineConfigs": [
           {
@@ -14,8 +14,8 @@
               "ram": 1024
             },
             "source": {
-              "type": "image",
-              "location": "juanariza131/che-swift"
+              "type": "dockerfile",
+              "location": "https://raw.githubusercontent.com/rickspencer3/revel-dev-container/che/.codenvy.dockerfile"
             },
             "type": "docker",
             "dev": true
