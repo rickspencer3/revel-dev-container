@@ -25,12 +25,12 @@
     ],
     "projects": [
       {
-        "name": "swift-sample",
+        "name": "revel-sample",
         "type": "blank",
-        "path": "/swift-sample",
+        "path": "/revel-sample",
         "source": {
           "type": "git",
-          "location": "https://github.com/juan131/bitnami-docker-swift.git",
+          "location": "https://github.com/rickspencer3/revel-dev-container.git",
           "parameters": {
             "branch": "che",
             "keepVcs": "true"
