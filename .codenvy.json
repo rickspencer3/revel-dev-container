@@ -1,0 +1,26 @@
+{
+  "v": "4.0",
+  "workspace": {
+    "name": "revel",
+    "defaultEnv": "revel",
+    "environments": [
+      {
+        "name": "revel",
+        "recipe": null,
+        "machineConfigs": [
+          {
+            "name": "ws-machine",
+            "limits": {
+              "ram": 1000
+            },
+            "source": {
+              "type": "dockerfile",
+              "location": "https://raw.githubusercontent.com/rickspencer3/revel-dev-container/che/.codenvy.dockerfile"
+            },
+            "type": "docker",
+            "dev": true
+          }
+        ]
+      }
+    ]
+}
