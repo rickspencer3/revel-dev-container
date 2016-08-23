@@ -26,7 +26,12 @@
     "name": "revel",
     "type": "go",
     "path": "/revel",
-    
+    "source": {
+      "type": "git",
+      "location": "https://github.com/amrecio/bitnami-docker-express",
+      "parameters": {
+        "keepVcs": "false"
+      }
     },
     "mixins": [
       "git"
