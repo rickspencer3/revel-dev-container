@@ -1,11 +1,11 @@
 {
   "v": "4.0",
   "workspace": {
-    "name": "revel",
-    "defaultEnv": "revel",
+    "name": "express",
+    "defaultEnv": "express",
     "environments": [
       {
-        "name": "revel",
+        "name": "express",
         "recipe": null,
         "machineConfigs": [
           {
@@ -15,31 +15,60 @@
             },
             "source": {
               "type": "dockerfile",
-              "location": "https://raw.githubusercontent.com/rickspencer3/revel-dev-container/che/.codenvy.dockerfile"
+              "location": "https://raw.githubusercontent.com/amrecio/bitnami-docker-express/master/.codenvy.dockerfile"
             },
             "type": "docker",
             "dev": true
           }
-        ],
-        "projects": [
-  {
-    "name": "revel",
-    "type": "go",
-    "path": "/revel",
-    "source": {
-      "type": "git",
-      "location": "https://github.com/amrecio/bitnami-docker-express",
-      "parameters": {
-        "keepVcs": "false"
+        ]
       }
-    },
-    "mixins": [
-      "git"
     ],
-    "modules": [],
-    "problems": []
-  }
-]
+    "projects": [
+      {
+        "name": "express-sample",
+        "type": "node-js",
+        "path": "/express-sample",
+        "source": {
+          "type": "git",
+          "location": "https://github.com/amrecio/bitnami-docker-express",
+          "parameters": {
+            "keepVcs": "false"
+          }
+        },
+        "mixins": [
+          "git"
+        ],
+        "modules": [],
+        "problems": []
+      }
+    ],
+    "commands": [
+      {
+        "name": "create sample project",
+        "type": "custom",
+        "commandLine": "cd ${current.project.path} && npm install express@4.13.4 && express -f . && npm install",
+        "attributes": {}
+      },
+      {
+        "name": "start",
+        "type": "custom",
+        "commandLine": "cd ${current.project.path} && npm start",
+        "attributes": {
+          "previewUrl": "http://${server.port.3000}/"
+        }
       }
     ]
+  },
+  "ide": {
+    "onProjectsLoaded": {
+      "actions": [
+        {
+          "properties": {
+            "name": "create sample project"
+          },
+          "id": "runCommand"
+        }
+      ]
+    }
+  }
 }
