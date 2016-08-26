@@ -34,8 +34,9 @@ RUN echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN bitnami-pkg install java-1.8.0_91-0 --checksum 64cf20b77dc7cce3a28e9fe1daa149785c9c8c13ad1249071bc778fa40ae8773
 ENV PATH=/opt/bitnami/java/bin:$PATH
 
+EXPOSE 80
+WORKDIR /projects
+
 LABEL che:server:3000:ref=revel che:server:3000:protocol=http
 
-EXPOSE 9000
-
-WORKDIR /app
+CMD ["tail", "-f", "/dev/null"]
