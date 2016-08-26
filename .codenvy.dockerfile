@@ -7,7 +7,7 @@
 
 FROM gcr.io/stacksmith-images/debian-buildpack:wheezy-r8
 
-MAINTAINER Bitnami <containers@bitnami.com>
+MAINTAINER Rick Spencer <rick@bitnami.com>
 
 ENV STACKSMITH_STACK_ID="9ajr5ei" \
     STACKSMITH_STACK_NAME="rickspencer3/revel-dev-container" \
