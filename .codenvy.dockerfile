@@ -36,9 +36,6 @@ ENV PATH=/opt/bitnami/java/bin:$PATH
 
 LABEL che:server:3000:ref=revel che:server:3000:protocol=http
 
-COPY ./revel-entrypoint.sh /
-ENTRYPOINT ["/revel-entrypoint.sh"]
-
 EXPOSE 9000
 
 WORKDIR /app
