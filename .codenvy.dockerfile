@@ -23,6 +23,7 @@ ENV PATH=$GOPATH/bin:/opt/bitnami/go/bin:$PATH
 RUN go get github.com/revel/cmd/revel
 RUN go get github.com/go-sql-driver/mysql
 ENV GOPATH=$GOPATH:/projects
+ENV CHANGE=PING
 
 #
 # Eclipse Che
