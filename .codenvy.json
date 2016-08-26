@@ -25,27 +25,7 @@
     ],
     "projects": [
       {
-        "name": "revel-sample",
-        "type": "blank",
-        "path": "/revel-sample",
-        "source": {
-          "type": "git",
-          "location": "https://github.com/rickspencer3/revel-dev-container.git",
-          "parameters": {
-            "branch": "che",
-            "keepVcs": "true"
-          }
-        },
-        "mixins": [
-          "git",
-          "pullrequest"
-        ],
-        "attributes": {
-          "local_branch": [ "contrib" ],
-          "contribute_to_branch" : [ "master" ]
-        },
-        "modules": [],
-        "problems": []
+
       }
     ],
     "commands": [
