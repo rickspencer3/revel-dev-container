@@ -1,19 +1,19 @@
 ## BUILDING
 ##   (from project root directory)
-##   $ docker build -t rickspencer3-revel-dev-container .
+##   $ docker build -t go-for-rickspencer3-revel-dev-container .
 ##
 ## RUNNING
-##   $ docker run rickspencer3-revel-dev-container
+##   $ docker run go-for-rickspencer3-revel-dev-container
 
-FROM gcr.io/stacksmith-images/debian-buildpack:wheezy-r8
+FROM gcr.io/stacksmith-images/debian-buildpack:wheezy-r10
 
 MAINTAINER Bitnami <containers@bitnami.com>
 
-ENV STACKSMITH_STACK_ID="9ajr5ei" \
-    STACKSMITH_STACK_NAME="rickspencer3/revel-dev-container" \
+ENV STACKSMITH_STACK_ID="hums77l" \
+    STACKSMITH_STACK_NAME="Go for rickspencer3/revel-dev-container" \
     STACKSMITH_STACK_PRIVATE="1"
 
-RUN bitnami-pkg install go-1.6.3-0 --checksum 8fd706186502cebc35bce121d3a176936153782a9ff4a9e4e93eee76c2ed02cc
+RUN bitnami-pkg install go-1.7.3-0 --checksum 5e41f1a5c05597245b391189f4d11ea5ddd21e9114d341a01c331d7469efb4f4
 
 ENV GOPATH=/gopath
 ENV PATH=$GOPATH/bin:/opt/bitnami/go/bin:$PATH
